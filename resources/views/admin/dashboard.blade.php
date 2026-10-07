@@ -140,7 +140,7 @@ body{
   <!-- Header -->
   <div class="header-wrap">
     <div class="header-left">
-      <h2>Admin Dashboard 👑</h2>
+      <h2>Admin Dashboard</h2>
       <p class="desc">Selamat datang, <strong>{{ session('user.nama','Admin') }}</strong> — pantau statistik & kelola kegiatan himpunan.</p>
     </div>
     <div class="header-right">
