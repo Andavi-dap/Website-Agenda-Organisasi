@@ -198,26 +198,6 @@ box-shadow:0 20px 40px rgba(0,0,0,0.12);
 .card-info{font-size:13px;color:#64748b;}
 
 .right{display:flex;align-items:center;gap:10px;}
-.actions{display:flex;gap:6px;}
-
-.btn{
-padding:8px 14px;border-radius:12px;border:none;
-cursor:pointer;font-weight:600;
-box-shadow:0 6px 15px rgba(0,0,0,0.1);
-transition:.25s;
-}
-
-.btn:hover{transform:scale(1.05);}
-
-.edit{
-background:linear-gradient(135deg,#3b82f6,#60a5fa);
-color:white;
-}
-
-.delete{
-background:linear-gradient(135deg,#ef4444,#f87171);
-color:white;
-}
 
 .badge{
 display:flex;
@@ -231,13 +211,11 @@ font-size:12px;
 font-weight:700;
 color:white;
 
-box-shadow:0 6px 15px rgba(0,0,0,0.12);
+box-box-shadow:0 6px 15px rgba(0,0,0,0.12);
 transition:.25s;
 }
 
-.badge:hover{
-transform:translateY(-2px) scale(1.05);
-}
+.badge:hover{transform:translateY(-2px) scale(1.05);}
 
 .selesai{
 background:linear-gradient(135deg,#22c55e,#4ade80);
@@ -256,47 +234,6 @@ padding:8px 12px;border-radius:10px;background:white;
 cursor:pointer;box-shadow:0 5px 12px rgba(0,0,0,0.1);
 }
 .page-btn.active{background:#3b82f6;color:white;}
-
-/* POPUP GLASS */
-.popup{
-position:fixed;top:0;left:0;width:100%;height:100%;
-background:rgba(15,23,42,0.45);
-backdrop-filter:blur(6px);
-display:flex;justify-content:center;align-items:center;
-opacity:0;pointer-events:none;transition:.3s;
-z-index:999;
-}
-
-.popup.active{
-opacity:1;pointer-events:auto;
-}
-
-.popup-box{
-background:rgba(255,255,255,0.85);
-backdrop-filter:blur(18px);
-padding:28px;border-radius:20px;width:340px;
-box-shadow:0 20px 50px rgba(0,0,0,0.2);
-animation:popupIn .25s ease;
-}
-
-@keyframes popupIn{
-from{transform:scale(.85);opacity:0}
-to{transform:scale(1);opacity:1}
-}
-
-.popup-title{
-font-weight:800;
-margin-bottom:10px;
-}
-
-.popup-box input{
-width:100%;padding:12px;margin-top:10px;
-border-radius:12px;border:none;background:#f1f5f9;
-}
-
-.popup-actions{
-display:flex;justify-content:flex-end;gap:10px;margin-top:15px;
-}
 </style>
 </head>
 
@@ -360,30 +297,6 @@ $grouped = collect($data)->filter(fn($items)=>$items->count()>0)->values();
 {{ ucfirst($item->status) }}
 </div>
 
-@if($isAdmin)
-<div class="actions">
-
-<button class="btn edit editBtn"
-data-id="{{ $item->id }}"
-data-nama="{{ $item->nama_kegiatan }}"
-data-tanggal="{{ $item->tanggal }}"
-data-waktu="{{ $item->waktu }}"
-data-lokasi="{{ $item->lokasi }}">
-Edit
-</button>
-
-<form action="{{ route('kegiatan.destroy', $item->id) }}" method="POST">
-    @csrf
-    @method('DELETE')
-
-    <button type="button" class="btn delete deleteBtn">
-        Delete
-    </button>
-</form>
-
-</div>
-@endif
-
 </div>
 
 </div>
@@ -398,42 +311,7 @@ Edit
 
 </div>
 
-<!-- EDIT POPUP -->
-<div class="popup" id="popupEdit">
-<div class="popup-box">
-<div class="popup-title">Edit Kegiatan</div>
 
-<form id="editForm" method="POST">
-@csrf
-@method('PUT')
-
-<input type="text" name="nama_kegiatan" id="editNama">
-<input type="date" name="tanggal" id="editTanggal">
-<input type="time" name="waktu" id="editWaktu">
-<input type="text" name="lokasi" id="editLokasi">
-
-<div class="popup-actions">
-<button type="button" onclick="closeEdit()" class="btn">Batal</button>
-<button type="submit" class="btn edit">Simpan</button>
-</div>
-</form>
-
-</div>
-</div>
-
-<!-- DELETE POPUP -->
-<div class="popup" id="popupDelete">
-<div class="popup-box">
-<div class="popup-title">⚠️ Hapus Kegiatan</div>
-<p id="deleteText"></p>
-
-<div class="popup-actions">
-<button onclick="closeDelete()" class="btn">Batal</button>
-<button id="confirmDelete" class="btn delete">Hapus</button>
-</div>
-
-</div>
-</div>
 
 <script>
 // SEARCH
@@ -484,40 +362,6 @@ pagination.appendChild(next);
 }
 
 showPage(1);
-
-// EDIT
-document.querySelectorAll('.editBtn').forEach(btn=>{
-btn.onclick=function(){
-editNama.value=this.dataset.nama;
-editTanggal.value=this.dataset.tanggal;
-editWaktu.value=this.dataset.waktu;
-editLokasi.value=this.dataset.lokasi;
-
-editForm.action="/update/"+this.dataset.id;
-popupEdit.classList.add('active');
-}
-});
-
-function closeEdit(){
-popupEdit.classList.remove('active');
-}
-
-// DELETE
-let selectedForm;
-document.querySelectorAll('.deleteBtn').forEach(btn=>{
-btn.onclick=function(){
-selectedForm=this.closest('form');
-let nama=this.closest('.card').querySelector('.card-title').innerText;
-deleteText.innerText=`Kegiatan "${nama}" akan dihapus.`;
-popupDelete.classList.add('active');
-}
-});
-
-confirmDelete.onclick=()=>selectedForm.submit();
-
-function closeDelete(){
-popupDelete.classList.remove('active');
-}
 
 // AUTO STATUS
 document.querySelectorAll('.card').forEach(card=>{

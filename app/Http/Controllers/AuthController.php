@@ -460,6 +460,9 @@ class AuthController extends Controller
                 // Remove password before storing in session
                 unset($user['password']);
                 session(['user' => $user]);
+                // Redirect based on role
+                // After login, always redirect to the main dashboard.
+                // Admin users can still access the admin dashboard via a button on the main page.
                 return redirect('/');
             }
         }

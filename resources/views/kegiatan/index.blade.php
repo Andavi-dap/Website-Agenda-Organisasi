@@ -782,6 +782,7 @@ Tambah Kegiatan
 </a>
 @endif
 
+
 <a href="{{ route('kegiatan.kalender') }}">
 <svg class="side-icon" viewBox="0 0 24 24" fill="none">
 <rect x="3" y="5" width="18" height="16" rx="2"/>
@@ -873,6 +874,11 @@ Kelola dan pantau kegiatan himpunan mahasiswa multimedia dengan mudah
 Peran: <strong style="color:{{ $isAdmin ? '#7c3aed' : '#2563eb' }}">{{ $isAdmin ? 'Admin' : 'Anggota' }}</strong>
 </div>
 <a href="{{ route('profile.view') }}">View Profile</a>
+@if($isAdmin)
+    <a href="{{ route('admin.dashboard') }}" class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal ml-2">
+        Admin Dashboard
+    </a>
+@endif
 <a href="/logout">Logout</a>
 </div>
 

@@ -11,15 +11,17 @@ class Role
     {
         $adminJabatan = config('haruna.admin_jabatan', []);
         $adminPrefix = config('haruna.admin_prefix', '');
+
         // Direct admin jabatan
         if (in_array($jabatan, $adminJabatan, true)) {
             return true;
         }
+
         // Prefix check for Ketua Divisi
         if ($adminPrefix && str_starts_with($jabatan, $adminPrefix)) {
             return true;
         }
+
         return false;
     }
 }
-?>
