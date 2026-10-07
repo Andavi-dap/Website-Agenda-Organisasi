@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\KegiatanController;
+use App\Http\Controllers\Admin\DashboardController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +32,7 @@ Route::middleware(['admin'])->group(function () {
     Route::get('/edit/{id}', [KegiatanController::class, 'edit'])->name('kegiatan.edit');
     Route::put('/update/{id}', [KegiatanController::class, 'update'])->name('kegiatan.update');
     Route::delete('/delete/{id}', [KegiatanController::class, 'destroy'])->name('kegiatan.destroy');
+    Route::get('/admin', [DashboardController::class, 'index'])->name('admin.dashboard');
 });
 
 Route::get('/status/{status}', [KegiatanController::class, 'filter'])->name('kegiatan.filter');
