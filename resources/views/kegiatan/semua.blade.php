@@ -259,11 +259,7 @@ $isAdmin = session('user.is_admin') ?? (
 </div>
 </div>
 
-@if($isAdmin)
-<a href="{{ route('kegiatan.create') }}" class="add-btn">+ Tambah Kegiatan</a>
-@else
 <a href="/" class="add-btn">← Kembali ke Dashboard</a>
-@endif
 </div>
 
 <input type="text" id="searchInput" class="search" placeholder="Cari kegiatan...">

@@ -16,7 +16,7 @@ class KegiatanController extends Controller
 
     $latest = Kegiatan::latest()->take(5)->get();
 
-    $notif = Kegiatan::where('status','akan datang')->count();
+    $notif = Kegiatan::whereDate('tanggal', '>', now()->toDateString())->count();
 
     return view('kegiatan.index', compact(
         'data',

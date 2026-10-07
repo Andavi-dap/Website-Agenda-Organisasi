@@ -11,6 +11,17 @@ class Kegiatan extends Model
 
     protected $table = 'kegiatans'; // opsional (kalau nama tabel beda)
 
+    public function getStatusAttribute($value)
+    {
+        if (!$this->tanggal) {
+            return $value;
+        }
+
+        return $this->tanggal <= now()->toDateString()
+            ? 'selesai'
+            : 'akan datang';
+    }
+
     protected $fillable = [
         'nama_kegiatan',
         'tanggal',

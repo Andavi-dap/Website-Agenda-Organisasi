@@ -13,8 +13,8 @@ class DashboardController extends Controller
     {
         // Basic statistics
         $total = Kegiatan::count();
-        $upcoming = Kegiatan::where('status', 'akan datang')->count();
-        $finished = Kegiatan::where('status', 'selesai')->count();
+        $upcoming = Kegiatan::whereDate('tanggal', '>', now()->toDateString())->count();
+        $finished = Kegiatan::whereDate('tanggal', '<=', now()->toDateString())->count();
 
         // 7 days ahead (including today)
         $now = Carbon::now();
@@ -51,7 +51,7 @@ class DashboardController extends Controller
         }
 
         // Nearest upcoming 5 activities
-        $nearest = Kegiatan::where('status', 'akan datang')
+        $nearest = Kegiatan::whereDate('tanggal', '>', now()->toDateString())
             ->orderBy('tanggal', 'asc')
             ->orderBy('waktu', 'asc')
             ->limit(5)
