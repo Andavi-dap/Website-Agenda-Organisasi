@@ -30,9 +30,19 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('kegiatans', function (Blueprint $table) {
-            $table->dropColumn(['divisi', 'pic']);
-            $table->dropIndex(['divisi']);
-            $table->dropIndex(['tanggal']);
+            if (Schema::hasColumn('kegiatans', 'divisi')) {
+                $table->dropIndex(['divisi']);
+            }
+
+            if (Schema::hasColumn('kegiatans', 'tanggal')) {
+                $table->dropIndex(['tanggal']);
+            }
+        });
+
+        Schema::table('kegiatans', function (Blueprint $table) {
+            if (Schema::hasColumn('kegiatans', 'divisi')) {
+                $table->dropColumn(['divisi', 'pic']);
+            }
         });
     }
 };

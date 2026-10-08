@@ -238,12 +238,7 @@ cursor:pointer;box-shadow:0 5px 12px rgba(0,0,0,0.1);
 </head>
 
 @php
-$jabatan = session('user.jabatan', '');
-$isAdmin = session('user.is_admin') ?? (
-    $jabatan === 'Ketua Himpunan' ||
-    $jabatan === 'Wakil Ketua Himpunan' ||
-    str_starts_with($jabatan, 'Ketua Divisi')
-);
+$isAdmin = session('user.is_admin') ?? false;
 @endphp
 
 <body>
@@ -285,6 +280,9 @@ $grouped = collect($data)->filter(fn($items)=>$items->count()>0)->values();
 <div class="card-info">
 {{ $item->tanggal }} • {{ $item->waktu }} • {{ $item->lokasi }}
 </div>
+<div style="margin-top:8px;">
+    <span style="display:inline-block;padding:4px 8px;border-radius:999px;background:{{ $item->divisi ? '#e2e8f0' : '#e5e7eb' }};color:#334155;font-size:11px;font-weight:600;">{{ $item->divisi ?: 'Belum ditentukan' }}</span>
+</div>
 </div>
 
 <div class="right">
@@ -292,6 +290,16 @@ $grouped = collect($data)->filter(fn($items)=>$items->count()>0)->values();
 <div class="badge {{ $item->status=='selesai'?'selesai':'akan' }}">
 {{ ucfirst($item->status) }}
 </div>
+@if($isAdmin)
+<div style="display:flex;gap:8px;align-items:center;">
+<button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editModal" data-id="{{ $item->id }}" data-nama="{{ e($item->nama_kegiatan) }}" data-tanggal="{{ $item->tanggal }}" data-waktu="{{ $item->waktu }}" data-lokasi="{{ e($item->lokasi) }}" data-divisi="{{ e($item->divisi) }}" data-pic="{{ e($item->pic ?? '') }}">Edit</button>
+<form action="{{ route('kegiatan.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Hapus kegiatan ini?');">
+  @csrf
+  @method('DELETE')
+  <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
+</form>
+</div>
+@endif
 
 </div>
 

@@ -744,12 +744,7 @@ grid-template-columns:1fr;
 </head>
 
 @php
-$jabatan = session('user.jabatan', '');
-$isAdmin = session('user.is_admin') ?? (
-    $jabatan === 'Ketua Himpunan' ||
-    $jabatan === 'Wakil Ketua Himpunan' ||
-    str_starts_with($jabatan, 'Ketua Divisi')
-);
+$isAdmin = session('user.is_admin') ?? false;
 @endphp
 
 <body>
@@ -770,6 +765,21 @@ $isAdmin = session('user.is_admin') ?? (
 </svg>
 Dashboard
 </a>
+
+@if($isAdmin)
+<a href="{{ route('admin.dashboard') }}">
+<svg class="side-icon" viewBox="0 0 24 24" fill="none">
+<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+</svg>
+Dashboard Admin
+</a>
+<a href="{{ route('admin.kegiatan.index') }}">
+<svg class="side-icon" viewBox="0 0 24 24" fill="none">
+<rect x="3" y="5" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/>
+</svg>
+Kelola Kegiatan
+</a>
+@endif
 
 <a href="{{ route('kegiatan.kalender') }}">
 <svg class="side-icon" viewBox="0 0 24 24" fill="none">
@@ -971,13 +981,18 @@ Peran: <strong style="color:{{ $isAdmin ? '#7c3aed' : '#2563eb' }}">{{ $isAdmin 
 <div>
 <strong>{{ $d->nama_kegiatan }}</strong><br>
 <small>{{ $d->tanggal }} | {{ $d->waktu }}</small>
+@if($d->divisi)
+    <div class="mt-2"><span style="display:inline-block;padding:4px 8px;border-radius:999px;background:#e2e8f0;color:#334155;font-size:11px;font-weight:600;">{{ $d->divisi ?: 'Belum ditentukan' }}</span></div>
+@else
+    <div class="mt-2"><span style="display:inline-block;padding:4px 8px;border-radius:999px;background:#e5e7eb;color:#475569;font-size:11px;font-weight:600;">Belum ditentukan</span></div>
+@endif
 </div>
 
 <div class="status-badge {{ $d->status == 'selesai' ? 'status-selesai' : 'status-akan' }}">
 {{ $d->status == 'selesai' ? 'Selesai' : 'Akan Datang' }}
 </div>
 
-</div> {{-- INI YANG KURANG --}}
+</div>
 @endforeach
 
 </div>

@@ -89,12 +89,7 @@ border:1px solid #dbeafe;
 </style>
 </head>
 @php
-$jabatan = session('user.jabatan', '');
-$isAdmin = session('user.is_admin') ?? (
-    $jabatan === 'Ketua Himpunan' ||
-    $jabatan === 'Wakil Ketua Himpunan' ||
-    str_starts_with($jabatan, 'Ketua Divisi')
-);
+$isAdmin = session('user.is_admin') ?? false;
 @endphp
 
 <body>

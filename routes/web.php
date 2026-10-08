@@ -11,39 +11,30 @@ Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.process');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// WEB ROUTES (must be logged in)
-Route::get('/', [KegiatanController::class, 'index'])->name('kegiatan.index');
+Route::middleware('auth.user')->group(function () {
+    Route::get('/', [KegiatanController::class, 'index'])->name('kegiatan.index');
+    Route::get('/status/{status}', [KegiatanController::class, 'filter'])->name('kegiatan.filter');
+    Route::get('/akan-datang', [KegiatanController::class, 'akanDatang'])->name('kegiatan.akan');
+    Route::get('/selesai', [KegiatanController::class, 'selesai'])->name('kegiatan.selesai');
+    Route::get('/kalender', [KegiatanController::class, 'kalender'])->name('kegiatan.kalender');
+    Route::get('/semua-kegiatan', [KegiatanController::class, 'semua'])->name('kegiatan.semua');
 
-// ADMIN ROUTES
-Route::middleware(['admin'])->group(function () {
-    // Kegiatan CRUD (existing)
-    Route::get('/tambah', [KegiatanController::class, 'create'])->name('kegiatan.create');
-    Route::post('/store', [KegiatanController::class, 'store'])->name('kegiatan.store');
-    Route::get('/edit/{id}', [KegiatanController::class, 'edit'])->name('kegiatan.edit');
-    Route::put('/update/{id}', [KegiatanController::class, 'update'])->name('kegiatan.update');
-    Route::delete('/delete/{id}', [KegiatanController::class, 'destroy'])->name('kegiatan.destroy');
+    Route::get('/profile', function () {
+        return view('profile');
+    })->name('profile.view');
 
-    // Admin dashboard
-    Route::get('/admin', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::middleware('admin')->group(function () {
+        Route::get('/tambah', [KegiatanController::class, 'create'])->name('kegiatan.create');
+        Route::post('/store', [KegiatanController::class, 'store'])->name('kegiatan.store');
+        Route::get('/edit/{id}', [KegiatanController::class, 'edit'])->whereNumber('id')->name('kegiatan.edit');
+        Route::put('/update/{id}', [KegiatanController::class, 'update'])->whereNumber('id')->name('kegiatan.update');
+        Route::delete('/delete/{id}', [KegiatanController::class, 'destroy'])->whereNumber('id')->name('kegiatan.destroy');
 
-    // Admin Kegiatan management (full CRUD)
-    Route::get('/admin/kegiatan',                        [KegiatanManageController::class, 'index'])->name('admin.kegiatan.index');
-    Route::get('/admin/kegiatan/create',                 [KegiatanManageController::class, 'create'])->name('admin.kegiatan.create');
-    Route::post('/admin/kegiatan',                       [KegiatanManageController::class, 'store'])->name('admin.kegiatan.store');
-    Route::get('/admin/kegiatan/{kegiatan}',             [KegiatanManageController::class, 'show'])->name('admin.kegiatan.show');
-    Route::get('/admin/kegiatan/{kegiatan}/edit',        [KegiatanManageController::class, 'edit'])->name('admin.kegiatan.edit');
-    Route::put('/admin/kegiatan/{kegiatan}',             [KegiatanManageController::class, 'update'])->name('admin.kegiatan.update');
-    Route::delete('/admin/kegiatan/{kegiatan}',          [KegiatanManageController::class, 'destroy'])->name('admin.kegiatan.destroy');
-    Route::delete('/admin/kegiatan/bulk',                [KegiatanManageController::class, 'bulkDestroy'])->name('admin.kegiatan.bulk-destroy');
+        Route::get('/admin', [DashboardController::class, 'index'])->name('admin.dashboard');
+        Route::get('/admin/kegiatan', [KegiatanManageController::class, 'index'])->name('admin.kegiatan.index');
+        Route::delete('/admin/kegiatan/bulk', [KegiatanManageController::class, 'bulkDestroy'])->name('admin.kegiatan.bulk-destroy');
+        Route::get('/admin/kegiatan/{kegiatan}/edit', [KegiatanManageController::class, 'edit'])->whereNumber('kegiatan')->name('admin.kegiatan.edit');
+        Route::put('/admin/kegiatan/{kegiatan}', [KegiatanManageController::class, 'update'])->whereNumber('kegiatan')->name('admin.kegiatan.update');
+        Route::delete('/admin/kegiatan/{kegiatan}', [KegiatanManageController::class, 'destroy'])->whereNumber('kegiatan')->name('admin.kegiatan.destroy');
+    });
 });
-
-// Additional routes
-Route::get('/status/{status}', [KegiatanController::class, 'filter'])->name('kegiatan.filter');
-Route::get('/akan-datang', [KegiatanController::class, 'akanDatang'])->name('kegiatan.akan');
-Route::get('/selesai', [KegiatanController::class, 'selesai'])->name('kegiatan.selesai');
-Route::get('/kalender', [KegiatanController::class, 'kalender'])->name('kegiatan.kalender');
-Route::get('/semua-kegiatan', [KegiatanController::class, 'semua'])->name('kegiatan.semua');
-
-Route::get('/profile', function () {
-    return view('profile');
-})->name('profile.view');

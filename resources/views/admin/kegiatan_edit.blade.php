@@ -44,7 +44,7 @@
             @error('lokasi')<p class="error">{{ $message }}</p>@enderror
 
             <label for="divisi">Divisi Penyelenggara</label>
-            <select id="divisi" name="divisi">
+            <select id="divisi" name="divisi" required>
                 <option value="">Pilih divisi</option>
                 @foreach(config('haruna.divisi', []) as $divisi)
                     <option value="{{ $divisi }}" {{ old('divisi', $kegiatan->divisi) === $divisi ? 'selected' : '' }}>{{ $divisi }}</option>
@@ -53,15 +53,8 @@
             @error('divisi')<p class="error">{{ $message }}</p>@enderror
 
             <label for="pic">PIC (Penanggung Jawab)</label>
-            <input id="pic" name="pic" type="text" maxlength="255" value="{{ old('pic', $kegiatan->pic) }}">
+            <input id="pic" name="pic" type="text" maxlength="100" value="{{ old('pic', $kegiatan->pic) }}">
             @error('pic')<p class="error">{{ $message }}</p>@enderror
-
-            <label for="status">Status</label>
-            <select id="status" name="status" required>
-                <option value="akan-datang" {{ old('status', str_replace(' ', '-', $kegiatan->status)) === 'akan-datang' ? 'selected' : '' }}>Akan Datang</option>
-                <option value="selesai" {{ old('status', str_replace(' ', '-', $kegiatan->status)) === 'selesai' ? 'selected' : '' }}>Selesai</option>
-            </select>
-            @error('status')<p class="error">{{ $message }}</p>@enderror
 
             <div class="actions">
                 <button type="submit">Simpan Perubahan</button>

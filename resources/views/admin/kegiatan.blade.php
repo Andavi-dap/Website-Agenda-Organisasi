@@ -106,12 +106,7 @@ table.dataTable tbody tr:hover td{background:rgba(59,130,246,.04);}
 </head>
 
 @php
-  $jabatan = session('user.jabatan','');
-  $isAdmin = session('user.is_admin') ?? (
-      $jabatan === 'Ketua Himpunan' ||
-      $jabatan === 'Wakil Ketua Himpunan' ||
-      str_starts_with($jabatan,'Ketua Divisi')
-  );
+  $isAdmin = session('user.is_admin') ?? false;
 @endphp
 
 <body>
@@ -267,21 +262,22 @@ $(function(){
     columns: [
       { data:'checkbox',  orderable:false, searchable:false, width:'36px' },
       { data:'no',        orderable:false, searchable:false, width:'48px' },
-      { data:'nama_kegiatan' },
-      { data:'divisi' },
-      { data:'pic' },
-      { data:'tanggal_waktu' },
-      { data:'lokasi' },
-      { data:'status',   orderable:false, searchable:false },
-      { data:'aksi',     orderable:false, searchable:false }
+      { data:'nama_kegiatan', orderable:true, searchable:false },
+      { data:'divisi', orderable:true, searchable:false },
+      { data:'pic', orderable:true, searchable:false },
+      { data:'tanggal_waktu', orderable:true, searchable:false },
+      { data:'lokasi', orderable:true, searchable:false },
+      { data:'status', orderable:false, searchable:false },
+      { data:'aksi', orderable:false, searchable:false }
     ],
+    order: [[5, 'desc']],
     language:{
       processing:'<div style="padding:16px;color:#3b82f6;font-weight:600;">Memuat data…</div>',
       zeroRecords:'<div style="padding:24px;text-align:center;color:#94a3b8;">Tidak ada kegiatan ditemukan.</div>',
       paginate:{ previous:'‹', next:'›' }
     },
     pageLength:10,
-    dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>rt<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+    dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'>>rt<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
   });
 
   // Select all
