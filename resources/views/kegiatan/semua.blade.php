@@ -217,6 +217,25 @@ transition:.25s;
 
 .badge:hover{transform:translateY(-2px) scale(1.05);}
 
+.aksi-btn{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+padding:8px 12px;
+border:0;
+border-radius:10px;
+color:#fff;
+font-size:12px;
+font-weight:700;
+font-family:'Poppins',sans-serif;
+text-decoration:none;
+cursor:pointer;
+transition:.25s;
+}
+.aksi-btn:hover{color:#fff;transform:translateY(-2px);box-shadow:0 8px 16px rgba(0,0,0,.16);}
+.aksi-edit{background:linear-gradient(135deg,#3b82f6,#60a5fa);}
+.aksi-hapus{background:linear-gradient(135deg,#ef4444,#f87171);}
+
 .selesai{
 background:linear-gradient(135deg,#22c55e,#4ade80);
 box-shadow:0 8px 18px rgba(34,197,94,0.35);
@@ -257,6 +276,35 @@ $isAdmin = session('user.is_admin') ?? false;
 <a href="/" class="add-btn">← Kembali ke Dashboard</a>
 </div>
 
+@if(session('success'))
+<div style="margin-bottom:16px;padding:12px 16px;border:1px solid #22c55e;border-radius:12px;background:#dcfce7;color:#166534;font-weight:600;">{{ session('success') }}</div>
+@endif
+@if(session('error'))
+<div style="margin-bottom:16px;padding:12px 16px;border:1px solid #ef4444;border-radius:12px;background:#fee2e2;color:#991b1b;font-weight:600;">{{ session('error') }}</div>
+@endif
+@if($errors->any())
+<div style="margin-bottom:16px;padding:12px 16px;border:1px solid #ef4444;border-radius:12px;background:#fee2e2;color:#991b1b;">
+    <ul style="margin:0;padding-left:20px;">
+        @foreach($errors->all() as $error)
+            <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
+
+@if($isAdmin)
+<nav style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;">
+    <a href="{{ route('admin.dashboard') }}" class="aksi-btn aksi-edit">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard Admin
+    </a>
+    <a href="{{ route('admin.kegiatan.index') }}" class="aksi-btn aksi-edit">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/></svg>
+        Kelola Kegiatan
+    </a>
+</nav>
+@endif
+
 <input type="text" id="searchInput" class="search" placeholder="Cari kegiatan...">
 
 @php
@@ -280,9 +328,7 @@ $grouped = collect($data)->filter(fn($items)=>$items->count()>0)->values();
 <div class="card-info">
 {{ $item->tanggal }} • {{ $item->waktu }} • {{ $item->lokasi }}
 </div>
-<div style="margin-top:8px;">
-    <span style="display:inline-block;padding:4px 8px;border-radius:999px;background:{{ $item->divisi ? '#e2e8f0' : '#e5e7eb' }};color:#334155;font-size:11px;font-weight:600;">{{ $item->divisi ?: 'Belum ditentukan' }}</span>
-</div>
+<div style="margin-top:8px;"><x-divisi-chip :divisi="$item->divisi" /></div>
 </div>
 
 <div class="right">
@@ -292,11 +338,11 @@ $grouped = collect($data)->filter(fn($items)=>$items->count()>0)->values();
 </div>
 @if($isAdmin)
 <div style="display:flex;gap:8px;align-items:center;">
-<button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editModal" data-id="{{ $item->id }}" data-nama="{{ e($item->nama_kegiatan) }}" data-tanggal="{{ $item->tanggal }}" data-waktu="{{ $item->waktu }}" data-lokasi="{{ e($item->lokasi) }}" data-divisi="{{ e($item->divisi) }}" data-pic="{{ e($item->pic ?? '') }}">Edit</button>
+<a href="{{ route('kegiatan.edit', $item->id) }}" class="aksi-btn aksi-edit">Edit</a>
 <form action="{{ route('kegiatan.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Hapus kegiatan ini?');">
   @csrf
   @method('DELETE')
-  <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
+  <button type="submit" class="aksi-btn aksi-hapus">Hapus</button>
 </form>
 </div>
 @endif

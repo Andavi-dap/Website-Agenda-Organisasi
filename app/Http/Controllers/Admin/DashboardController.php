@@ -15,10 +15,9 @@ class DashboardController extends Controller
         $total = Kegiatan::count();
         $upcoming = Kegiatan::akanDatang()->count();
         $finished = Kegiatan::selesai()->count();
-        $sevenDaysAhead = Kegiatan::where(function ($q) use ($now) {
-            $q->where('tanggal', '>=', $now->toDateString())
-                ->where('tanggal', '<=', $now->copy()->addDays(7)->toDateString());
-        })->count();
+        $sevenDaysAhead = Kegiatan::akanDatang()
+            ->where('tanggal', '<=', $now->copy()->addDays(7)->toDateString())
+            ->count();
 
         $incomplete = Kegiatan::whereNull('divisi')
             ->orWhereNull('pic')
@@ -63,4 +62,3 @@ class DashboardController extends Controller
         ));
     }
 }
-

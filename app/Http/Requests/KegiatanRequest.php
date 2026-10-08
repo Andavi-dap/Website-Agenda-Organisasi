@@ -17,7 +17,7 @@ class KegiatanRequest extends FormRequest
         return [
             'nama_kegiatan' => ['required', 'string', 'max:255'],
             'tanggal' => ['required', 'date'],
-            'waktu' => ['required'],
+            'waktu' => ['required', 'date_format:H:i,H:i:s'],
             'lokasi' => ['required', 'string', 'max:255'],
             'divisi' => ['required', Rule::in(config('haruna.divisi'))],
             'pic' => ['nullable', 'string', 'max:100'],

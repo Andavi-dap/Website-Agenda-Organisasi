@@ -981,11 +981,7 @@ Peran: <strong style="color:{{ $isAdmin ? '#7c3aed' : '#2563eb' }}">{{ $isAdmin 
 <div>
 <strong>{{ $d->nama_kegiatan }}</strong><br>
 <small>{{ $d->tanggal }} | {{ $d->waktu }}</small>
-@if($d->divisi)
-    <div class="mt-2"><span style="display:inline-block;padding:4px 8px;border-radius:999px;background:#e2e8f0;color:#334155;font-size:11px;font-weight:600;">{{ $d->divisi ?: 'Belum ditentukan' }}</span></div>
-@else
-    <div class="mt-2"><span style="display:inline-block;padding:4px 8px;border-radius:999px;background:#e5e7eb;color:#475569;font-size:11px;font-weight:600;">Belum ditentukan</span></div>
-@endif
+<div class="mt-2"><x-divisi-chip :divisi="$d->divisi" /></div>
 </div>
 
 <div class="status-badge {{ $d->status == 'selesai' ? 'status-selesai' : 'status-akan' }}">

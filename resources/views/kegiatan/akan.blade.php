@@ -348,6 +348,10 @@ transition:0.6s;
 .back:hover::before{
 left:100%;
 }
+.admin-nav{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 18px;}
+.admin-nav a{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:12px;background:linear-gradient(135deg,#3b82f6,#60a5fa);color:#fff;font-size:13px;font-weight:700;text-decoration:none;box-shadow:0 8px 18px rgba(59,130,246,.2);}
+.admin-nav svg{width:16px;height:16px;stroke:currentColor;stroke-width:2;flex-shrink:0;}
+.divisi-wrap{margin-top:7px;}
 </style>
 </head>
 
@@ -362,6 +366,13 @@ left:100%;
 <div class="subtitle">Daftar kegiatan organisasi yang akan dilaksanakan.</div>
 </div>
 </div>
+
+@if(session('user.is_admin'))
+<nav class="admin-nav">
+<a href="{{ route('admin.dashboard') }}"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard Admin</a>
+<a href="{{ route('admin.kegiatan.index') }}"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/></svg>Kelola Kegiatan</a>
+</nav>
+@endif
 
 <div class="search-row">
 <input type="text" id="searchInput" class="search" placeholder="Cari kegiatan...">
@@ -405,6 +416,7 @@ elseif($diff <= 14 && $diff > 3) $class = 'near';
 <div class="card-info">
 {{ $item->tanggal }} • {{ $item->waktu }} • {{ $item->lokasi }}
 </div>
+<div class="divisi-wrap"><x-divisi-chip :divisi="$item->divisi" /></div>
 
 <div class="countdown" data-date="{{ \Carbon\Carbon::parse($item->tanggal . ' ' . $item->waktu)->format('Y-m-d\TH:i:s') }}"></div>
 <div class="progress">

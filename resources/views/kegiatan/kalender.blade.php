@@ -290,6 +290,10 @@ display:block;
 color:#64748b;
 margin-top:4px;
 }
+.admin-nav{display:flex;gap:10px;flex-wrap:wrap;margin:-10px 0 18px;}
+.admin-nav a{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:12px;background:linear-gradient(135deg,#3b82f6,#60a5fa);color:#fff;font-size:13px;font-weight:700;text-decoration:none;box-shadow:0 8px 18px rgba(59,130,246,.2);}
+.admin-nav svg{width:16px;height:16px;stroke:currentColor;stroke-width:2;flex-shrink:0;}
+.event-chip{display:inline-block;margin-top:4px;padding:2px 6px;border-radius:999px;background:#e5e7eb;color:#475569;font-size:9px;font-weight:600;}
 
 /* RESPONSIVE */
 @media(max-width:900px){
@@ -348,6 +352,13 @@ grid-template-columns:1fr;
 
 </div>
 
+@if(session('user.is_admin'))
+<nav class="admin-nav">
+<a href="{{ route('admin.dashboard') }}"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard Admin</a>
+<a href="{{ route('admin.kegiatan.index') }}"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/></svg>Kelola Kegiatan</a>
+</nav>
+@endif
+
 <div class="card">
 
 <div class="calendar">
@@ -381,6 +392,7 @@ $isToday = $fullDate == date('Y-m-d');
 <div class="event">
 {{ $item->nama_kegiatan }}
 <span class="time">{{ $item->waktu }}</span>
+<span class="event-chip">{{ $item->divisi ?: 'Belum ditentukan' }}</span>
 </div>
 @endforeach
 

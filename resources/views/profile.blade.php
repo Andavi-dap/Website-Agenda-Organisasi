@@ -111,6 +111,10 @@ $isAdmin = session('user.is_admin') ?? false;
 </div>
 
 <a href="/" class="btn">Kembali Dashboard</a>
+@if($isAdmin)
+<a href="{{ route('admin.dashboard') }}" class="btn">Dashboard Admin</a>
+<a href="{{ route('admin.kegiatan.index') }}" class="btn">Kelola Kegiatan</a>
+@endif
 <a href="/logout" class="btn btn2">Logout</a>
 
 </div>

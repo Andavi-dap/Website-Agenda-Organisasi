@@ -14,6 +14,8 @@
         input { width: 100%; min-height: 44px; padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font: inherit; }
         input:focus { outline: 2px solid #2563eb; outline-offset: 1px; }
         .error { margin: 4px 0 0; color: #b91c1c; font-size: 13px; }
+        .flash-success { margin-bottom: 16px; padding: 12px 16px; border: 1px solid #22c55e; border-radius: 8px; background: #dcfce7; color: #166534; }
+        .flash-error { margin-bottom: 16px; padding: 12px 16px; border: 1px solid #ef4444; border-radius: 8px; background: #fee2e2; color: #991b1b; }
         .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
         .actions a, .actions button { min-height: 42px; padding: 10px 16px; border: 0; border-radius: 6px; font: inherit; font-weight: 600; text-decoration: none; cursor: pointer; }
         .actions button { background: #1d4ed8; color: #fff; }
@@ -23,6 +25,12 @@
 <body>
     <main>
         <h1>Edit Kegiatan</h1>
+        @if(session('success'))
+            <div class="flash-success">{{ session('success') }}</div>
+        @endif
+        @if(session('error'))
+            <div class="flash-error">{{ session('error') }}</div>
+        @endif
         <form action="{{ route('kegiatan.update', $data->id) }}" method="POST">
             @csrf
             @method('PUT')
@@ -69,7 +77,7 @@
 
             <div class="actions">
                 <button type="submit">Simpan Perubahan</button>
-                <a href="{{ route('kegiatan.index') }}">Kembali</a>
+                <a href="{{ route('kegiatan.semua') }}">Kembali</a>
             </div>
         </form>
     </main>
